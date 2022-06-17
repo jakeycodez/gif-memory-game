@@ -22,3 +22,7 @@ button:hover {
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 20px;
 }
+
+.search {
+  padding-top: 1rem;
+}
