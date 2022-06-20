@@ -14,46 +14,32 @@ function App() {
   const [choiceOne, setChoiceOne] = useState(null);
   const [choiceTwo, setChoiceTwo] = useState(null);
   const [disabled, setDisabled] = useState(false);
+  const [userInput, setUserInput] = useState("")
 
 
   var cardImages = []
 
-  useEffect(() => {
-    
-    const userInput = "pizza";
 
-     const loadCards = (url) => {
-      cardImages.push({
-        src: url,
-        matched: false
-      })
-    }
-
-    axios
-      .get(`https://api.giphy.com/v1/gifs/search?api_key=lb0AoRDXWhAPC7TD9WjVdMMTC3h5CBat&q=${userInput}&limit=6`)
-      .then((result) => {
-        console.log(result)
-          result.data.data.forEach((gif) => {
-            loadCards(gif.images.downsized_large.url)
-              // cardImages.shift();
-          })
-      })
-      console.log("This is what's in the array ", cardImages);
+  const findCards = () => {
       
-    }, [cardImages])  
-    
-   
-
-    // const cardImages = [
-    //   { src: "/img/lebron-1.gif", matched: false },
-    //   { src: "/img/lebron-2.gif", matched: false },
-    //   { src: "/img/lebron-3.gif", matched: false },
-    //   { src: "/img/lebron-4.gif", matched: false },
-    //   { src: "/img/lebron-5.gif", matched: false },
-    //   { src: "/img/lebron-6.gif", matched: false },
-    // ];
-
-
+       const loadCards = (url) => {
+        cardImages.push({
+          src: url,
+          matched: false
+        })
+      }
+  
+      axios
+        .get(`https://api.giphy.com/v1/gifs/search?api_key=lb0AoRDXWhAPC7TD9WjVdMMTC3h5CBat&q=${userInput}&limit=6`)
+        .then((result) => {
+          console.log(result)
+            result.data.data.forEach((gif) => {
+              loadCards(gif.images.downsized_large.url)
+                console.log(gif)
+            })
+        }).then(() => {shuffleCards()})
+        console.log("This is what's in the array ", cardImages);
+  }
 
   //shuffle Cards
   const shuffleCards = () => {
@@ -104,16 +90,26 @@ function App() {
     setDisabled(false);
   };
 
-  // start game automatically on page load
-  useEffect(() => {
-    shuffleCards();
-  }, []);
 
   return (
     <div className="App">
       <h1>GIF Match</h1>
       <button onClick={shuffleCards}>New Game</button>
 
+      <div>
+      <label></label>
+
+      <input
+      onChange={e => setUserInput(e.target.value)}
+      name="userInput"
+      className="label"
+      placeholder="Enter search term"
+      type="text">
+      </input>
+      <button onClick={findCards}>Set cards!</button>
+
+
+      </div>
       <div className="card-grid">
         {cards.map((card) => (
           <SingleCard
