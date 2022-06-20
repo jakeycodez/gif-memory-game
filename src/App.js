@@ -16,37 +16,44 @@ function App() {
   const [disabled, setDisabled] = useState(false);
 
 
+  var cardImages = []
 
   useEffect(() => {
     
     const userInput = "pizza";
-    
+
+     const loadCards = (url) => {
+      cardImages.push({
+        src: url,
+        matched: false
+      })
+    }
 
     axios
       .get(`https://api.giphy.com/v1/gifs/search?api_key=lb0AoRDXWhAPC7TD9WjVdMMTC3h5CBat&q=${userInput}&limit=6`)
       .then((result) => {
         console.log(result)
-        result.data.data.forEach((gif) => {
-          cardImages.push({
-            src: gif.images.downsized_large.url,
-            matched: false
-          }
-            )
-        })
+          result.data.data.forEach((gif) => {
+            loadCards(gif.images.downsized_large.url)
+              // cardImages.shift();
+          })
       })
-      console.log(cardImages);
+      console.log("This is what's in the array ", cardImages);
+      
+    }, [cardImages])  
+    
    
-  
-  }, [])  
 
-  const cardImages = [
-    { src: "/img/lebron-1.gif", matched: false },
-    { src: "/img/lebron-2.gif", matched: false },
-    { src: "/img/lebron-3.gif", matched: false },
-    { src: "/img/lebron-4.gif", matched: false },
-    { src: "/img/lebron-5.gif", matched: false },
-    { src: "/img/lebron-6.gif", matched: false },
-  ];
+    // const cardImages = [
+    //   { src: "/img/lebron-1.gif", matched: false },
+    //   { src: "/img/lebron-2.gif", matched: false },
+    //   { src: "/img/lebron-3.gif", matched: false },
+    //   { src: "/img/lebron-4.gif", matched: false },
+    //   { src: "/img/lebron-5.gif", matched: false },
+    //   { src: "/img/lebron-6.gif", matched: false },
+    // ];
+
+
 
   //shuffle Cards
   const shuffleCards = () => {
